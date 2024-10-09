@@ -8,5 +8,14 @@
 </template>
 
 <script setup>
-import Counter from './Counter.vue'
+import Counter from "./Counter.vue";
+import { onMounted } from "vue";
+
+const props = defineProps({
+  data: Object,
+});
+
+onMounted(() => {
+  console.log("q==>> indexProps", props);
+});
 </script>

@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import Link from './Link.vue'
+import Link from "./Link.vue";
 </script>
 
 <style>
