@@ -1,18 +1,32 @@
 <template>
-  <div class="layout">
-    <div class="navigation">
-      <a href="/" class="logo">
-        <img src="./logo.svg" height="64" width="64" alt="logo" />
-      </a>
-      <Link href="/">Home</Link>
-      <Link href="/about">About</Link>
+  <div class="page-shell">
+    <div class="header">
+      <div class="navigation">
+        是个头啊
+        <a href="/" class="logo">
+          <img src="./logo.svg" height="64" width="64" alt="logo" />
+        </a>
+        <Link href="/">Home</Link>
+        <Link href="/about">About</Link>
+      </div>
     </div>
     <div class="content"><slot /></div>
+    <footer class="footer">这是个尾</footer>
   </div>
 </template>
 
 <script setup>
-import Link from "./Link.vue";
+import { onMounted } from "vue";
+import Link from "../components/Link/index.vue";
+
+const props = defineProps({
+  headerData: Array,
+  footerData: Array,
+});
+
+onMounted(() => {
+  console.log("q==>> pageShell mounted", props);
+});
 </script>
 
 <style>
@@ -29,27 +43,42 @@ a {
 </style>
 
 <style scoped>
-.layout {
+.page-shell {
   display: flex;
-  max-width: 900px;
-  margin: auto;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.header {
+  height: 250px;
+  background: #12b1ac;
 }
 .content {
+  flex: 1;
   padding: 20px;
   border-left: 2px solid #eee;
   padding-bottom: 50px;
-  min-height: 100vh;
 }
 .navigation {
   padding: 20px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: self-start;
   line-height: 1.8em;
+  color: #eee;
+  font-size: 20px;
 }
 .logo {
   margin-top: 20px;
   margin-bottom: 10px;
+}
+.footer {
+  height: 150px;
+  background-color: #b9216d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #eee;
+  font-size: 20px;
 }
 </style>
