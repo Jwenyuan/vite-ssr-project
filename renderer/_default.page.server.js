@@ -11,14 +11,13 @@ import logoUrl from "../public/logo.ico";
 
 export async function onBeforeRender(pageContext) {
   const { urlPathname } = pageContext.routeParams;
-  console.log("q==>> onBeforeRender urlPathname", urlPathname);
+
+  if (!pageContext.exports.getProjectJson) return;
 
   try {
     // TODO: 根据路由信息获取接口数据
     const response = await fetch(
-      `http://192.168.31.252/api/project/admin/history/new/${
-        import.meta.env.VITE_PROJECT_ID
-      }`,
+      pageContext.exports.getProjectJson + import.meta.env.VITE_PROJECT_ID,
       {
         headers: {
           authorization:
@@ -45,14 +44,9 @@ export async function onBeforeRender(pageContext) {
   }
 }
 
-export async function prerender() {
-  console.log("q==>> 开始预渲染");
-  // TODO: 请求导航生成动态页面预渲染
-  return ["/product/1", "/product/2"];
-}
 async function render(pageContext) {
-  console.log("q==>> render pageContext:", pageContext);
-  const { Page, pageProps } = pageContext;
+  console.log("q==>> render pageContext:");
+  const { Page, pageProps, exports } = pageContext;
   // This render() hook only supports SSR, see https://vite-plugin-ssr.com/render-modes for how to modify render() to support SPA
   if (!Page)
     throw new Error("My render() hook expects pageContext.Page to be defined");
@@ -60,8 +54,7 @@ async function render(pageContext) {
 
   const appHtml = await renderToString(app);
 
-  // See https://vite-plugin-ssr.com/head
-  const { documentProps } = pageContext.exports;
+  const { documentProps } = exports;
   const title = (documentProps && documentProps.title) || "这是个页面标题";
   const desc = (documentProps && documentProps.description) || "这是个页面描述";
 
@@ -89,6 +82,7 @@ async function render(pageContext) {
 
 async function renderToString(app) {
   let err;
+
   app.use(antd);
   // Workaround: renderToString_() swallows errors in production, see https://github.com/vuejs/core/issues/7876
   app.config.errorHandler = (err_) => {
@@ -97,4 +91,14 @@ async function renderToString(app) {
   const appHtml = await renderToString_(app);
   if (err) throw err;
   return appHtml;
+}
+
+export async function prerender() {
+  console.log("q==>> prerender");
+  // TODO: 请求导航生成动态页面预渲染
+  return ["/product/1", "/product/2"];
+}
+
+export function onBeforePrerender(pageContext) {
+  console.log("q==>> onBeforePrerender pageContext:", pageContext);
 }

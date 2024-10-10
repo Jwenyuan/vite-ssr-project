@@ -63,6 +63,11 @@ const handleCurrentPageChange = (page) => {
 };
 </script>
 
+<script>
+export const getProjectJson =
+  "http://192.168.31.252/api/project/admin/history/new/";
+</script>
+
 <style scoped>
 .content-box {
   padding: 20px;

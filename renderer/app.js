@@ -5,8 +5,8 @@ import { setPageContext } from "./usePageContext";
 export { createApp };
 
 function createApp(Page, pageProps, pageContext) {
-  const { data: { headerData, footerData, contentData } = {} } =
-    pageProps || {};
+  const { data = {} } = pageProps || {};
+  const { headerData = "[]", footerData = "[]", contentData = "[]" } = data;
   const PageWithLayout = {
     render() {
       return h(
