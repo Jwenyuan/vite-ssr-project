@@ -5,7 +5,7 @@ export default {
   plugins: [
     vue(),
     ssr({
-      // prerender: true, // 启动编译预渲染
+      prerender: true, // 启动编译预渲染
     }),
   ],
 };

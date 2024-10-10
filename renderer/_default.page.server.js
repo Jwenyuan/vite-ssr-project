@@ -7,7 +7,7 @@ import { escapeInject, dangerouslySkipEscape } from "vite-plugin-ssr/server";
 import fetch from "node-fetch";
 import antd from "ant-design-vue";
 import { createApp } from "./app";
-import logoUrl from "./logo.ico";
+import logoUrl from "../public/logo.ico";
 
 export async function onBeforeRender(pageContext) {
   const { urlPathname } = pageContext.routeParams;
@@ -16,7 +16,9 @@ export async function onBeforeRender(pageContext) {
   try {
     // TODO: 根据路由信息获取接口数据
     const response = await fetch(
-      "http://192.168.31.252/api/project/admin/history/new/1840556471694749697",
+      `http://192.168.31.252/api/project/admin/history/new/${
+        import.meta.env.VITE_PROJECT_ID
+      }`,
       {
         headers: {
           authorization:
@@ -43,6 +45,11 @@ export async function onBeforeRender(pageContext) {
   }
 }
 
+export async function prerender() {
+  console.log("q==>> 开始预渲染");
+  // TODO: 请求导航生成动态页面预渲染
+  return ["/product/1", "/product/2"];
+}
 async function render(pageContext) {
   console.log("q==>> render pageContext:", pageContext);
   const { Page, pageProps } = pageContext;

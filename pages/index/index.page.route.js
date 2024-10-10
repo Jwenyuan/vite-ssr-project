@@ -8,6 +8,7 @@ export default (pageContext) => {
   //   result.routeParams.view = "overview";
   //   return result;
   // }
+  console.log("q==>> index.page.route");
   return {
     routeParams: {
       urlPathname,
