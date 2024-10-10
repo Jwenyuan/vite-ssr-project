@@ -4,7 +4,12 @@
       <div class="navigation">
         是个头啊
         <a href="/" class="logo">
-          <img src="./logo.svg" height="64" width="64" alt="logo" />
+          <img
+            src="https://avatars.githubusercontent.com/u/33242796?v=4"
+            height="64"
+            width="64"
+            alt="logo"
+          />
         </a>
         <Link href="/">Home</Link>
         <Link href="/about">About</Link>
@@ -63,14 +68,13 @@ a {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: self-start;
+  align-items: center;
   line-height: 1.8em;
   color: #eee;
   font-size: 20px;
 }
 .logo {
   margin-top: 20px;
-  margin-bottom: 10px;
 }
 .footer {
   height: 150px;

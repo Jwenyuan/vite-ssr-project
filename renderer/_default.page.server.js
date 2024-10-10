@@ -5,6 +5,7 @@ export const passToClient = ["pageProps", "urlPathname"];
 import { renderToString as renderToString_ } from "@vue/server-renderer";
 import { escapeInject, dangerouslySkipEscape } from "vite-plugin-ssr/server";
 import fetch from "node-fetch";
+import antd from "ant-design-vue";
 import { createApp } from "./app";
 import logoUrl from "./logo.ico";
 
@@ -81,6 +82,7 @@ async function render(pageContext) {
 
 async function renderToString(app) {
   let err;
+  app.use(antd);
   // Workaround: renderToString_() swallows errors in production, see https://github.com/vuejs/core/issues/7876
   app.config.errorHandler = (err_) => {
     err = err_;
