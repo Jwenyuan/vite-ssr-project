@@ -5,7 +5,6 @@ export const passToClient = ["pageProps", "urlPathname"];
 import { renderToString as renderToString_ } from "@vue/server-renderer";
 import { escapeInject, dangerouslySkipEscape } from "vite-plugin-ssr/server";
 import fetch from "node-fetch";
-import antd from "ant-design-vue";
 import { createApp } from "./app";
 import logoUrl from "*/logo.ico";
 
@@ -51,6 +50,7 @@ async function render(pageContext) {
   if (!Page)
     throw new Error("My render() hook expects pageContext.Page to be defined");
   const app = createApp(Page, pageProps, pageContext);
+  // console.log("q==>> renderToStream:", renderToStream(Page));
 
   const appHtml = await renderToString(app);
 
@@ -83,7 +83,6 @@ async function render(pageContext) {
 async function renderToString(app) {
   let err;
 
-  app.use(antd);
   // Workaround: renderToString_() swallows errors in production, see https://github.com/vuejs/core/issues/7876
   app.config.errorHandler = (err_) => {
     err = err_;
@@ -96,7 +95,7 @@ async function renderToString(app) {
 export async function prerender() {
   console.log("q==>> prerender");
   // TODO: 请求导航生成动态页面预渲染
-  return ["/product/1", "/product/2"];
+  return ["/", "/product/1", "/product/2"];
 }
 
 export function onBeforePrerender(pageContext) {

@@ -11,7 +11,6 @@
       :pageSize="10"
       :current="current"
       @change="handleCurrentPageChange"
-      showTotal
     />
   </div>
 </template>

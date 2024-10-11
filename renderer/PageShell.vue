@@ -30,7 +30,7 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  console.log("q==>> pageShell mounted", props);
+  console.log("q==>> pageShell mounted");
 });
 </script>
 

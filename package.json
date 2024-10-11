@@ -2,6 +2,7 @@
   "scripts": {
     "dev": "npm run server:dev",
     "prod": "npm run build && npm run server:prod",
+    "start": "vite dev",
     "build": "vite build",
     "server:dev": "node ./server",
     "server:prod": "cross-env NODE_ENV=production node ./server"
@@ -15,10 +16,14 @@
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
     "node-fetch": "^3.3.2",
+    "open": "^10.1.0",
     "sirv": "^2.0.3",
     "vite": "^4.4.9",
     "vite-plugin-ssr": "^0.4.142",
     "vue": "^3.3.4"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "sass": "^1.79.5"
+  }
 }

@@ -1,4 +1,5 @@
 import { createSSRApp, h } from "vue";
+import antd from "ant-design-vue";
 import PageShell from "./PageShell.vue";
 import { setPageContext } from "./usePageContext";
 
@@ -25,6 +26,8 @@ function createApp(Page, pageProps, pageContext) {
   };
 
   const app = createSSRApp(PageWithLayout);
+
+  app.use(antd);
 
   // We make pageContext available from any Vue component
   setPageContext(app, pageContext);
