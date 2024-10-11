@@ -8,4 +8,11 @@ export default {
       prerender: true, // 启动编译预渲染
     }),
   ],
+  resolve: {
+    alias: {
+      "@": "/src",
+      "*": "/public",
+      "#": "/renderer",
+    },
+  },
 };

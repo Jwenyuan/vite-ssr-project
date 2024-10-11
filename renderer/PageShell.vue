@@ -22,7 +22,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import Link from "../src/components/Link/index.vue";
+import Link from "@/components/Link/index.vue";
 
 const props = defineProps({
   headerData: Array,

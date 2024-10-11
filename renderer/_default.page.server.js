@@ -7,7 +7,7 @@ import { escapeInject, dangerouslySkipEscape } from "vite-plugin-ssr/server";
 import fetch from "node-fetch";
 import antd from "ant-design-vue";
 import { createApp } from "./app";
-import logoUrl from "../public/logo.ico";
+import logoUrl from "*/logo.ico";
 
 export async function onBeforeRender(pageContext) {
   const { urlPathname } = pageContext.routeParams;
