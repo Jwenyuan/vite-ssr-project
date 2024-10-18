@@ -6,8 +6,9 @@ import { setPageContext } from "./usePageContext";
 export { createApp };
 
 function createApp(Page, pageProps, pageContext) {
-  const { data = {} } = pageProps || {};
+  const { data = {}, breadcrumb = [] } = pageProps || {};
   const { headerData = "[]", footerData = "[]", contentData = "[]" } = data;
+  console.log("q==>> breadcrumb", breadcrumb);
   const PageWithLayout = {
     render() {
       return h(
@@ -15,6 +16,7 @@ function createApp(Page, pageProps, pageContext) {
         {
           headerData: JSON.parse(headerData),
           footerData: JSON.parse(footerData),
+          breadcrumb,
         },
         {
           default() {

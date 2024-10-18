@@ -1,17 +1,53 @@
 export { render };
-// See https://vite-plugin-ssr.com/data-fetching
 export const passToClient = ["pageProps", "urlPathname"];
 
 import { renderToString as renderToString_ } from "@vue/server-renderer";
 import { escapeInject, dangerouslySkipEscape } from "vite-plugin-ssr/server";
 import fetch from "node-fetch";
 import { createApp } from "./app";
-import logoUrl from "*/logo.ico";
+import logoUrl from "@public/logo.ico";
+
+const getNavList = async () => {
+  const response = await fetch(
+    `http://192.168.31.252/api/project/admin/project/navigation/list?projectId=${
+      import.meta.env.VITE_PROJECT_ID
+    }&type=NAVIGATION`
+  );
+};
+
+const navList = [
+  { url: "/", breadcrumb: [{ name: "首页" }] },
+  {
+    url: "/about",
+    breadcrumb: [{ name: "关于" }],
+  },
+  ...(() => {
+    const list = [];
+    for (let i = 1; i <= 50; i++) {
+      list.push({
+        url: `/product/${i}`,
+        breadcrumb: [{ href: "/", name: "首页" }, { name: `产品${i}` }],
+      });
+    }
+    return list;
+  })(),
+];
 
 export async function onBeforeRender(pageContext) {
-  const { urlPathname } = pageContext.routeParams;
+  const { urlOriginal } = pageContext;
 
-  if (!pageContext.exports.getProjectJson) return;
+  const breadcrumb =
+    navList.find((item) => item.url === String(urlOriginal))?.breadcrumb || [];
+
+  console.log("q==>> onBeforeRender", urlOriginal, breadcrumb);
+  if (!pageContext.exports.getProjectJson)
+    return {
+      pageContext: {
+        pageProps: {
+          breadcrumb,
+        },
+      },
+    };
 
   try {
     // TODO: 根据路由信息获取接口数据
@@ -35,7 +71,12 @@ export async function onBeforeRender(pageContext) {
     let { data, msg, code } = await response.json();
     return {
       pageContext: {
-        pageProps: { data, msg, code },
+        pageProps: {
+          data,
+          msg,
+          code,
+          breadcrumb,
+        },
       },
     };
   } catch (error) {
@@ -44,13 +85,12 @@ export async function onBeforeRender(pageContext) {
 }
 
 async function render(pageContext) {
-  console.log("q==>> render pageContext:");
+  console.log("q==>> render");
   const { Page, pageProps, exports } = pageContext;
-  // This render() hook only supports SSR, see https://vite-plugin-ssr.com/render-modes for how to modify render() to support SPA
+
   if (!Page)
     throw new Error("My render() hook expects pageContext.Page to be defined");
   const app = createApp(Page, pageProps, pageContext);
-  // console.log("q==>> renderToStream:", renderToStream(Page));
 
   const appHtml = await renderToString(app);
 
@@ -63,6 +103,7 @@ async function render(pageContext) {
       <head>
         <meta charset="UTF-8" />
         <link rel="icon" href="${logoUrl}" />
+        <link rel="stylesheet" href="/base.css" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="${desc}" />
         <title>${title}</title>
@@ -74,16 +115,14 @@ async function render(pageContext) {
 
   return {
     documentHtml,
-    pageContext: {
-      // We can add some `pageContext` here, which is useful if we want to do page redirection https://vite-plugin-ssr.com/page-redirection
-    },
+    pageContext: {},
   };
 }
 
 async function renderToString(app) {
   let err;
 
-  // Workaround: renderToString_() swallows errors in production, see https://github.com/vuejs/core/issues/7876
+  // renderToString错误抛出
   app.config.errorHandler = (err_) => {
     err = err_;
   };
@@ -95,7 +134,10 @@ async function renderToString(app) {
 export async function prerender() {
   console.log("q==>> prerender");
   // TODO: 请求导航生成动态页面预渲染
-  return ["/", "/product/1", "/product/2"];
+  return navList.map((item) => item.url);
+
+  // 优化：模板数据渲染前统一请求数据渲染不走beforeRenderHook
+  // return [{url: xx, pageContext: {pageProps: {}}}]
 }
 
 export function onBeforePrerender(pageContext) {

@@ -5,14 +5,17 @@ export default {
   plugins: [
     vue(),
     ssr({
-      prerender: true, // 启动编译预渲染
+      prerender: {
+        noExtraDir: true,
+      }, // 启动编译预渲染
     }),
   ],
   resolve: {
     alias: {
-      "@": "/src",
-      "*": "/public",
-      "#": "/renderer",
+      "@": __dirname,
+      "@src": "/src",
+      "@public": "/public",
+      "@renderer": "/renderer",
     },
   },
 };

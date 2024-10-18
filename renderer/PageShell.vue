@@ -1,18 +1,30 @@
 <template>
   <div class="page-shell">
     <div class="header">
-      <div class="navigation">
-        是个头啊
+      <div>
         <a href="/" class="logo">
           <img
             src="https://avatars.githubusercontent.com/u/33242796?v=4"
-            height="64"
-            width="64"
+            height="124"
+            width="124"
             alt="logo"
           />
         </a>
+        <div class="corporation-name">蘑菇头集团</div>
+        <div class="breadcrumb">
+          <Breadcrumb separator=">">
+            <template v-for="(item, index) in props.breadcrumb" :key="index">
+              <BreadcrumbItem>
+                <a v-if="item?.href" :href="item.href"> {{ item.name }}</a>
+                <template v-else>{{ item.name }}</template>
+              </BreadcrumbItem>
+            </template>
+          </Breadcrumb>
+        </div>
+      </div>
+      <div class="navigation">
         <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
+        <Link href="/about.html">About</Link>
       </div>
     </div>
     <div class="content"><slot /></div>
@@ -22,30 +34,22 @@
 
 <script setup>
 import { onMounted } from "vue";
-import Link from "@/components/Link/index.vue";
+import { Breadcrumb, BreadcrumbItem } from "ant-design-vue";
+import Link from "@src/components/Link/index.vue";
+import { usePageContext } from "@renderer/usePageContext";
 
 const props = defineProps({
   headerData: Array,
   footerData: Array,
+  breadcrumb: Array,
 });
+
+const pageContext = usePageContext();
 
 onMounted(() => {
-  console.log("q==>> pageShell mounted");
+  console.log("q==>> pageShell mounted", pageContext, props.breadcrumb);
 });
 </script>
-
-<style>
-body {
-  margin: 0;
-  font-family: sans-serif;
-}
-* {
-  box-sizing: border-box;
-}
-a {
-  text-decoration: none;
-}
-</style>
 
 <style scoped>
 .page-shell {
@@ -56,6 +60,10 @@ a {
 .header {
   height: 250px;
   background: #12b1ac;
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  position: relative;
 }
 .content {
   flex: 1;
@@ -72,9 +80,17 @@ a {
   line-height: 1.8em;
   color: #eee;
   font-size: 20px;
+  margin-left: 30px;
 }
-.logo {
-  margin-top: 20px;
+.corporation-name {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.breadcrumb {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
 }
 .footer {
   height: 150px;

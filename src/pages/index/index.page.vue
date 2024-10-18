@@ -1,10 +1,15 @@
 <template>
   <div class="content-box">
     <div class="list-box">
-      <div class="item" v-for="item in currentList" :key="item.id">
+      <Link
+        class="item"
+        v-for="item in currentList"
+        :key="item.id"
+        :href="`/product/${item.id + 1}.html`"
+      >
         <div>{{ item.title }}</div>
-        <img class="img" :src="item.image" alt="蘑菇头" />
-      </div>
+        <img class="img" :src="item.image" alt="蘑菇头" title="蘑菇头图片" />
+      </Link>
     </div>
     <Pagination
       :total="list.length"
@@ -18,6 +23,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { Pagination } from "ant-design-vue";
+import Link from "@src/components/Link/index.vue";
 
 const props = defineProps({
   contentData: Array,
